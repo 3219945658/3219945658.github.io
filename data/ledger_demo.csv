@@ -1,0 +1,15 @@
+date,pool,W,revenue,cost,build,n_sold,note
+2026-11-03,digital-delivery,15,0,0,0,0,第一周：建站与挂载，尚无成交（这是正常起点）
+2026-11-10,digital-delivery,15,19.9,1.2,0,1,第一单：收款 19.9（真实到账）
+2026-11-17,digital-delivery,15,19.9,1.2,0,1,第二单
+2026-11-24,digital-delivery,15,39.8,2.4,0,2,两单
+2026-12-01,digital-delivery,15,19.9,1.2,0,1,一单
+2026-12-08,digital-delivery,15,0,1.2,0,0,零成交：渠道未变，观察一周
+2026-12-15,digital-delivery,15,39.8,2.4,0,2,两单
+2026-12-22,digital-delivery,15,59.7,3.6,0,3,三单
+2026-12-29,digital-delivery,15,39.8,2.4,0,2,两单
+2027-01-05,digital-delivery,15,19.9,1.2,0,1,一单
+2027-01-12,digital-delivery,15,59.7,3.6,0,3,三单
+2027-01-19,digital-delivery,150,199.0,12.0,0,10,放大 10 倍本金后的同一套动作（V3 检验用）
+2027-01-26,digital-delivery,150,219.0,13.0,0,11,放大后
+2027-02-02,digital-delivery,150,189.0,11.0,0,9,放大后

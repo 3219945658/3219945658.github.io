@@ -1,0 +1,126 @@
+<!doctype html><html lang="zh-CN"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>免费试算：你的现金还能撑几个月</title>
+<meta name="description" content="输入四个数，立刻算出现金跑道与单笔最大可承受亏损。纯本地计算，不上传任何数据。">
+<style>
+:root{--ink:#16181d;--mut:#6b7280;--line:#e6e8ec;--bg:#fbfbfc;--accent:#1a56db}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+ font:16px/1.75 -apple-system,"Segoe UI","Microsoft YaHei",system-ui,sans-serif}
+.wrap{max-width:640px;margin:0 auto;padding:44px 22px 80px}
+h1{font-size:26px;line-height:1.35;margin:0 0 6px;letter-spacing:-.2px}
+h2{font-size:17px;margin:34px 0 10px}
+p{margin:14px 0}
+.mut{color:var(--mut);font-size:14px}
+label{display:block;margin:16px 0 4px;font-size:14px;font-weight:600}
+input{width:100%;padding:12px 14px;font-size:16px;border:1px solid var(--line);
+ border-radius:8px;background:#fff;font-family:inherit}
+input:focus{outline:2px solid #c7d7f7;border-color:var(--accent)}
+button{width:100%;margin-top:22px;padding:15px;font-size:16px;font-weight:600;color:#fff;
+ background:var(--accent);border:0;border-radius:9px;cursor:pointer;font-family:inherit}
+button:hover{opacity:.92}
+.res{background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin-top:26px;display:none}
+.res.on{display:block}
+.kv{display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-bottom:1px solid var(--line);font-size:15px}
+.kv:last-child{border-bottom:0}
+.kv b{font-variant-numeric:tabular-nums}
+.red{color:#c0392b}.green{color:#1e8449}
+.cta{display:block;text-align:center;text-decoration:none;border:1px solid var(--accent);
+ color:var(--accent);padding:14px;border-radius:9px;font-weight:600;margin:26px 0 8px;background:#fff}
+.note{background:#f4f6f8;border-radius:8px;padding:14px 16px;font-size:14px;color:#444}
+footer{border-top:1px solid var(--line);margin-top:48px;padding-top:16px;color:var(--mut);font-size:13px}
+</style></head><body><div class="wrap">
+<h1>你的现金，还能撑几个月？</h1>
+<p class="mut">填四个数，立刻出结果。全部在你自己的浏览器里算，不上传、不联网、不需要注册。</p>
+
+<label for="income">每月到手收入（元）</label>
+<input id="income" type="number" inputmode="decimal" placeholder="8000">
+
+<label for="expense">每月必要支出（元）</label>
+<input id="expense" type="number" inputmode="decimal" placeholder="5000">
+
+<label for="payment">每月还债（元，没有填 0）</label>
+<input id="payment" type="number" inputmode="decimal" placeholder="2500">
+
+<label for="cash">手上可动用的现金（元）</label>
+<input id="cash" type="number" inputmode="decimal" placeholder="20000">
+
+<button id="go" type="button">算一下</button>
+
+<div class="res" id="res">
+  <div class="kv"><span>月净现金流</span><b id="r1">—</b></div>
+  <div class="kv"><span>现金跑道</span><b id="r2">—</b></div>
+  <div class="kv"><span>现金流断裂日</span><b id="r3">—</b></div>
+  <div class="kv"><span>单笔最大可承受亏损</span><b id="r4">—</b></div>
+  <p class="note" id="r5"></p>
+</div>
+
+<h2>完整版多算四件事</h2>
+<p class="mut">免费版只回答"还能撑多久"和"最多能亏多少"。完整版还会算：</p>
+<ul class="mut" style="padding-left:20px">
+<li>债务 ÷ 年收入（超过 3 倍就是高杠杆）</li>
+<li>盈亏平衡月营业额（你的固定成本要卖多少才填平）</li>
+<li>所需周转本金（备货到收款这几个月要垫多少）</li>
+<li>下注上限 f* 与实用比例（越过它就是数学上的必死线）</li>
+</ul>
+<a class="cta" href="index.html">看完整版《清算日》 →</a>
+<p class="mut" style="text-align:center">完整版是一次性买断，报告可打印成一页 A4，能直接递给家人或合伙人。</p>
+
+<footer>
+<p><strong>这是算术，不是理财建议。</strong>它不预测市场，不推荐任何标的，只把你输入的数字算清楚。所有结论只对你填的数成立。</p>
+</footer>
+</div>
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  function num(id){ var v = parseFloat($(id).value); return isFinite(v) ? v : 0; }
+  function money(x){ return x.toLocaleString('zh-CN', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' 元'; }
+
+  function calc(){
+    var inc = num('income'), exp = num('expense'), pay = num('payment'), cash = num('cash');
+    var ncf = inc - exp - pay;
+    ['r1','r2','r3'].forEach(function(id){ $(id).className = ''; });
+    $('r1').textContent = money(ncf);
+    $('r1').className = ncf < 0 ? 'red' : 'green';
+
+    var r2 = $('r2'), r3 = $('r3'), r5 = $('r5');
+    if (ncf >= 0){
+      r2.textContent = '——（不会断）';
+      r3.textContent = '不存在';
+      r3.className = 'green';
+      r5.textContent = '当前净现金流为正，所以不存在"撑不住"的日期。但请注意：这个结论只在收入与支出都不变时成立。';
+    } else {
+      if (cash <= 0){
+        r2.textContent = '0 个月';
+        r3.textContent = '已经断了';
+        r3.className = 'red';
+        r5.textContent = '现金已为 0 或负，而每月净流出 ' + money(-ncf) + '。这时候任何"先投入后回收"的方案都不该做。';
+      } else {
+        var months = cash / (-ncf);
+        var d = new Date();
+        var totalDays = Math.round(months * 30.44);
+        var target = new Date(d.getTime() + totalDays * 86400000);
+        r2.textContent = months.toFixed(1) + ' 个月';
+        r2.className = months < 6 ? 'red' : '';
+        r3.textContent = target.getFullYear() + '-' +
+          String(target.getMonth()+1).padStart(2,'0') + '-' +
+          String(target.getDate()).padStart(2,'0');
+        r3.className = months < 6 ? 'red' : '';
+        r5.textContent = months < 6
+          ? '跑道不足 6 个月：这是红灯。此时最重要的不是"怎么赚更多"，是"怎么让每月为正"。'
+          : '跑道 ' + months.toFixed(1) + ' 个月。这个数是按当前趋势外推的，不是预言——收入或支出变了，它就变。';
+      }
+    }
+
+    var cap = cash / 3;
+    $('r4').textContent = money(cap);
+    $('res').classList.add('on');
+  }
+
+  $('go').addEventListener('click', calc);
+  ['income','expense','payment','cash'].forEach(function(id){
+    $(id).addEventListener('keydown', function(e){ if (e.key === 'Enter') calc(); });
+  });
+})();
+</script>
+</body></html>
