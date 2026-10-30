@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>清算日 · 现金流与破产阈值体检（完整版）</title>
+<meta name="description" content="输入十个数字，算出八个可执行的数：现金跑道、断裂日、单笔上限、债务倍数、盈亏平衡营业额、周转本金、凯利上限、实用比例。纯本地计算，不上传、不联网。">
+<style>
+:root{--ink:#16181d;--mut:#6b7280;--line:#e6e8ec;--bg:#fbfbfc;--accent:#1a56db}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+ font:16px/1.75 -apple-system,"Segoe UI","Microsoft YaHei",system-ui,sans-serif}
+.wrap{max-width:720px;margin:0 auto;padding:44px 22px 80px}
+h1{font-size:26px;line-height:1.35;margin:0 0 4px;letter-spacing:-.2px}
+h2{font-size:17px;margin:34px 0 10px}
+p{margin:12px 0}
+.mut{color:var(--mut);font-size:14px}
+label{display:block;margin:14px 0 4px;font-size:14px;font-weight:600}
+input{width:100%;padding:11px 13px;font-size:16px;border:1px solid var(--line);
+ border-radius:8px;background:#fff;font-family:inherit;font-variant-numeric:tabular-nums}
+input:focus{outline:2px solid #c7d7f7;border-color:var(--accent)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+@media(max-width:560px){.grid{grid-template-columns:1fr}}
+button{width:100%;margin-top:20px;padding:14px;font-size:16px;font-weight:600;color:#fff;
+ background:var(--accent);border:0;border-radius:9px;cursor:pointer;font-family:inherit}
+button.ghost{background:#fff;color:var(--accent);border:1px solid var(--accent)}
+table{width:100%;border-collapse:collapse;margin:16px 0}
+th,td{text-align:left;padding:10px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+th{width:42%;font-weight:600}
+td.n{font-variant-numeric:tabular-nums;font-weight:600}
+td.note{color:var(--mut);font-size:13px}
+.flag{padding:11px 14px;margin:8px 0;border-left:4px solid #ccc;background:#fafafa;border-radius:0 6px 6px 0}
+.flag.red{border-color:#c0392b;background:#fdf3f2}
+.flag.yellow{border-color:#d68910;background:#fdf9f0}
+.flag.green{border-color:#1e8449;background:#f2f9f4}
+.act{background:#f4f6f8;padding:16px 20px;border-radius:8px;margin-top:22px}
+.act ol{margin:8px 0 0 18px;padding:0}
+.act li{margin:6px 0}
+footer{border-top:1px solid var(--line);margin-top:44px;padding-top:16px;color:var(--mut);font-size:13px}
+.brand{font-size:13px;color:var(--mut);letter-spacing:.08em;text-transform:uppercase}
+@media print{
+ body{background:#fff;font-size:11.5pt}
+ .wrap{max-width:none;padding:0}
+ .noprint{display:none!important}
+ h1{font-size:18pt}
+ h2{font-size:12pt;margin:14pt 0 6pt}
+ th,td{padding:5pt 4pt}
+ .act{background:#fff;border:1pt solid #999}
+ footer{margin-top:16pt}
+ input{-webkit-appearance:none;appearance:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="brand">清算日 / QINGSUANRI</div>
+  <h1>现金流与破产阈值体检</h1>
+  <p class="mut">填入你自己的数字，得到八个可执行的数。全部在本机浏览器计算，不上传、不联网、不需要注册。</p>
+
+  <div class="noprint">
+    <h2>一 你的现金流</h2>
+    <div class="grid">
+      <div><label for="income">每月到手收入（元）</label><input id="income" type="number" inputmode="decimal" value="8000"></div>
+      <div><label for="expense">每月必要支出（元）</label><input id="expense" type="number" inputmode="decimal" value="5000"></div>
+      <div><label for="payment">每月还债（元，没有填 0）</label><input id="payment" type="number" inputmode="decimal" value="0"></div>
+      <div><label for="cash">手上可动用现金（元）</label><input id="cash" type="number" inputmode="decimal" value="20000"></div>
+      <div><label for="debt">债务总余额（元，没有填 0）</label><input id="debt" type="number" inputmode="decimal" value="0"></div>
+    </div>
+
+    <h2>二 你在做的生意</h2>
+    <div class="grid">
+      <div><label for="fixed">每月固定成本（元）</label><input id="fixed" type="number" inputmode="decimal" value="3000"></div>
+      <div><label for="margin">毛利率（%，填 30 表示 30%）</label><input id="margin" type="number" inputmode="decimal" value="30"></div>
+      <div><label for="turnover">周转月数（备货到收款，月）</label><input id="turnover" type="number" inputmode="decimal" value="1"></div>
+      <div><label for="edge">单笔预期回报率（%）</label><input id="edge" type="number" inputmode="decimal" value="10"></div>
+      <div><label for="vol">单笔回报波动率（%）</label><input id="vol" type="number" inputmode="decimal" value="40"></div>
+    </div>
+  </div>
+
+  <h2>三 结果</h2>
+  <table>
+    <tr><th>月净现金流</th><td class="n" id="r1">—</td><td class="note">收入 − 必要支出 − 债务月供</td></tr>
+    <tr><th>现金跑道</th><td class="n" id="r2">—</td><td class="note">现金 ÷ 每月净流出；这是时间，不是余额</td></tr>
+    <tr><th>现金流断裂日</th><td class="n" id="r3">—</td><td class="note">按当前趋势外推，不是预言</td></tr>
+    <tr><th>单笔最大可承受亏损</th><td class="n" id="r4">—</td><td class="note">现金 ÷ 3：能承受三次才叫资本</td></tr>
+    <tr><th>债务 ÷ 年收入</th><td class="n" id="r5">—</td><td class="note">&gt; 3 倍是高杠杆，&gt; 5 倍是脆弱</td></tr>
+    <tr><th>盈亏平衡月营业额</th><td class="n" id="r6">—</td><td class="note">月固定成本 ÷ 毛利率</td></tr>
+    <tr><th>所需周转本金</th><td class="n" id="r7">—</td><td class="note">盈亏平衡营业额 × 周转月数</td></tr>
+    <tr><th>凯利上限 f*</th><td class="n" id="r8">—</td><td class="note">单笔预期回报 ÷ 方差</td></tr>
+    <tr><th>实用下注比例</th><td class="n" id="r9">—</td><td class="note">f* ÷ 2：因为参数一定是估错的</td></tr>
+  </table>
+
+  <h2>四 结论</h2>
+  <div id="flags"></div>
+
+  <div class="act">
+    <strong>三条动作（按顺序，不许跳）</strong>
+    <ol>
+      <li>先让月净现金流 ≥ 0：这是唯一能改变“断裂日”的变量。</li>
+      <li>再把单笔亏损压到 <span id="a2">—</span> 以下：这样你永远还有下一手。</li>
+      <li>最后才谈增长：下注比例不超过 <span id="a3">—</span>。</li>
+    </ol>
+  </div>
+
+  <div class="noprint" style="margin-top:20px">
+    <button id="print" type="button">打印 / 存为 PDF（A4）</button>
+    <p class="mut" style="text-align:center">把这一页打出来，就是一张可以递给家人、合伙人或银行的一页纸。</p>
+  </div>
+
+  <footer>
+    <p><strong>这是算术，不是理财建议。</strong>它不预测市场、不推荐任何标的、不提供贷款方案。所有结论只对你输入的数字成立。</p>
+    <p>本文件不联网、不上传数据、不存储任何信息。你可以离线打开、反复使用。</p>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var n = function(id){ var v = parseFloat($(id).value); return isFinite(v) ? v : 0; };
+  function money(x){ return x.toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' 元'; }
+  function set(id, text, cls){
+    var el = $(id); el.textContent = text;
+    el.className = 'n' + (cls ? ' ' + cls : '');
+    if (cls === 'red') el.style.color = '#c0392b';
+    else if (cls === 'green') el.style.color = '#1e8449';
+    else el.style.color = '';
+  }
+  function setDate(){
+    var d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  }
+
+  function calc(){
+    var inc=n('income'), exp=n('expense'), pay=n('payment'), cash=n('cash'), debt=n('debt');
+    var fixed=n('fixed'), margin=n('margin')/100, turn=n('turnover'), edge=n('edge')/100, vol=n('vol')/100;
+    var flags = [];
+
+    var ncf = inc - exp - pay;
+    set('r1', money(ncf), ncf < 0 ? 'red' : 'green');
+
+    var runway = null, breakDate = '不存在（净现金流为正）';
+    if (ncf < 0){
+      if (cash <= 0){ runway = 0; breakDate = '已经断了'; }
+      else {
+        runway = cash / (-ncf);
+        var d = new Date(), days = Math.round(runway * 30.44);
+        var t = new Date(d.getTime() + days*86400000);
+        breakDate = t.getFullYear() + '-' + String(t.getMonth()+1).padStart(2,'0') + '-' + String(t.getDate()).padStart(2,'0');
+      }
+    }
+    if (runway === null){
+      set('r2','——（不会断）','green'); set('r3', '不存在', 'green');
+    } else if (runway === 0){
+      set('r2','0 个月','red'); set('r3','已经断了','red');
+    } else {
+      set('r2', runway.toFixed(1) + ' 个月', runway < 6 ? 'red' : '');
+      set('r3', breakDate, runway < 6 ? 'red' : '');
+    }
+
+    var cap = cash / 3;
+    set('r4', money(cap));
+
+    var ratio = inc > 0 ? debt / (inc*12) : null;
+    set('r5', ratio === null ? '——' : ratio.toFixed(2) + ' 倍', ratio !== null && ratio > 3 ? 'red' : '');
+
+    var be = margin > 0 ? fixed / margin : null;
+    set('r6', be === null ? '——' : money(be) + ' / 月');
+
+    var wc = be === null ? null : be * turn;
+    set('r7', wc === null ? '——' : money(wc));
+
+    var v = vol*vol;
+    var fs = (edge > 0 && v > 0) ? edge / v : 0;
+    set('r8', fs > 0 ? (fs*100).toFixed(1) + '%' : '——', fs > 1 ? 'red' : '');
+
+    var fu = fs > 0 ? Math.min(fs/2, 1) : 0;
+    set('r9', fu > 0 ? (fu*100).toFixed(1) + '%' : '——', fu > 0.5 ? 'red' : '');
+
+    if (ncf < 0) flags.push(['red','净现金流为负：现在的问题不是“怎么赚更多”，是“怎么让每月为正”。']);
+    if (runway !== null && runway > 0 && runway < 6) flags.push(['red','现金跑道不足 6 个月：任何“先投入后回收”的方案现在都不该做。']);
+    if (ratio !== null && ratio > 3) flags.push(['red','债务超过年收入 3 倍：你的“资本”其实是别人的资产。']);
+    if (wc !== null && cash < wc) flags.push(['yellow','现金低于所需周转本金：先降固定成本或缩短周转期，别用借来的钱当周转金。']);
+    if (fs > 1) flags.push(['red','凯利上限 > 100%：这个结果不是你厉害，是参数至少有一个是错的。']);
+    if (fu > 0.5) flags.push(['yellow','实用下注比例 > 50%：一次判断错就出局，降到 25% 以下。']);
+    if (!flags.length) flags.push(['green','四项体检未触发红线。仍要按“三次原则”控制单笔亏损。']);
+
+    var box = $('flags');
+    box.innerHTML = '';
+    flags.forEach(function(f){
+      var d = document.createElement('div');
+      d.className = 'flag ' + f[0];
+      d.textContent = f[1];
+      box.appendChild(d);
+    });
+
+    $('a2').textContent = money(cap);
+    $('a3').textContent = fu > 0 ? (fu*100).toFixed(1) + '%' : '——（没有可算的优势，不要下注）';
+  }
+
+  ['income','expense','payment','cash','debt','fixed','margin','turnover','edge','vol'].forEach(function(id){
+    $(id).addEventListener('input', calc);
+  });
+  $('print').addEventListener('click', function(){
+    document.title = '清算日体检报告 ' + setDate();
+    window.print();
+  });
+  calc();
+})();
+</script>
+</body>
+</html>

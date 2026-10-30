@@ -44,7 +44,7 @@ TEMPLATE = """<!doctype html><html lang="zh-CN"><head>
 <link rel="canonical" href="{base}/{slug}.html">
 <style>{css}</style>
 </head><body><div class="wrap">
-<nav><a href="index.html">首页</a><a href="calc.html">免费试算</a><a href="index.html#all">全部工具页</a></nav>
+<nav><a href="index.html">首页</a><a href="calc.html">免费试算</a><a href="buy.html">完整版</a><a href="index.html#all">全部工具页</a></nav>
 <h1>{title}</h1>
 <p class="mut">{query}</p>
 <h2>你可能正在经历的</h2>
@@ -108,7 +108,7 @@ def main(argv):
     if "--base" in argv:
         base = argv[argv.index("--base") + 1].rstrip("/")
 
-    buy = os.environ.get("ISON_BUY_URL", "#")
+    buy = os.environ.get("ISON_BUY_URL", "buy.html")
     rows = read_topics(topics_path)
     os.makedirs(out_dir, exist_ok=True)
     year = dt.date.today().year
@@ -128,7 +128,9 @@ def main(argv):
     with open(os.path.join(out_dir, "index.html"), "w", encoding="utf-8") as fh:
         fh.write(INDEX_TEMPLATE.format(css=CSS, buy=buy, year=year, links="\n".join(links)))
 
-    urls = ["%s/index.html" % base, "%s/calc.html" % base] + ["%s/%s.html" % (base, r["slug"]) for r in rows]
+    urls = (["%s/index.html" % base, "%s/calc.html" % base, "%s/buy.html" % base,
+             "%s/qingsuanri.html" % base]
+            + ["%s/%s.html" % (base, r["slug"]) for r in rows])
     sm = ['<?xml version="1.0" encoding="UTF-8"?>',
           '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     for u in urls:

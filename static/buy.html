@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>拿走它：清算日 · 现金流体检工具（免费下载）</title>
+<meta name="description" content="一个只做算术的本地工具：算出现金跑道、断裂日、单笔上限、盈亏平衡营业额、凯利上限。免费下载，离线运行，不联网不上传。">
+<style>
+:root{--ink:#16181d;--mut:#6b7280;--line:#e6e8ec;--bg:#fbfbfc;--accent:#1a56db;--green:#0e9f6e}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+ font:16px/1.75 -apple-system,"Segoe UI","Microsoft YaHei",system-ui,sans-serif}
+.wrap{max-width:660px;margin:0 auto;padding:44px 22px 80px}
+h1{font-size:26px;line-height:1.35;margin:0 0 6px;letter-spacing:-.2px}
+h2{font-size:17px;margin:34px 0 10px}
+p{margin:13px 0}
+.mut{color:var(--mut);font-size:14px}
+.brand{font-size:13px;color:var(--mut);letter-spacing:.08em;text-transform:uppercase}
+.dl{display:block;text-align:center;background:var(--accent);color:#fff;text-decoration:none;
+ padding:16px;border-radius:10px;font-weight:700;font-size:17px;margin:22px 0 8px}
+.dl:hover{opacity:.92}
+.dl small{display:block;font-weight:400;font-size:13px;opacity:.85;margin-top:4px}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px;margin:26px 0;text-align:center}
+.card h2{margin-top:0}
+.qr{width:100%;max-width:300px;border-radius:10px;display:block;margin:0 auto}
+.price{font-size:34px;font-weight:700;letter-spacing:-1px;margin:6px 0 2px}
+ol,ul{padding-left:22px}
+li{margin:8px 0}
+hr{border:0;border-top:1px solid var(--line);margin:36px 0}
+.note{background:#f4f6f8;border-radius:8px;padding:14px 16px;font-size:14px;color:#333}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:15px}
+td,th{text-align:left;padding:9px 6px;border-bottom:1px solid var(--line)}
+th{width:44%;font-weight:600}
+footer{border-top:1px solid var(--line);margin-top:44px;padding-top:16px;color:var(--mut);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="brand">清算日 / QINGSUANRI</div>
+  <h1>拿走它，用完再决定要不要付</h1>
+  <p class="mut">一个只做算术的本地工具。不预测、不推荐、不承诺。它把你输入的数字，算成八个可执行的数。</p>
+
+  <a class="dl" href="qingsuanri.html" download="清算日-现金流体检.html">
+    下载完整版（一个 HTML 文件，双击即用）
+    <small>离线运行 · 不上传 · 不联网 · 可打印成 A4</small>
+  </a>
+  <p class="mut" style="text-align:center">
+    还没想下载？先 <a href="calc.html">免费算 2 个数</a>（不用付款、不用注册）。
+  </p>
+
+  <hr>
+
+  <h2>它算哪八个</h2>
+  <table>
+    <tr><th>月净现金流</th><td>收入 − 支出 − 月供：这个数是正还是负，决定后面全部</td></tr>
+    <tr><th>现金跑道</th><td>你还能撑几个月——时间，不是余额</td></tr>
+    <tr><th>现金流断裂日</th><td>按当前趋势推出的那一个日期</td></tr>
+    <tr><th>单笔最大可承受亏损</th><td>现金 ÷ 3：能承受三次才叫资本</td></tr>
+    <tr><th>债务 ÷ 年收入</th><td>&gt; 3 倍是高杠杆，&gt; 5 倍是脆弱</td></tr>
+    <tr><th>盈亏平衡月营业额</th><td>固定成本 ÷ 毛利率：低于它，做多少亏多少</td></tr>
+    <tr><th>所需周转本金</th><td>平衡营业额 × 周转月数：你要先垫多少钱</td></tr>
+    <tr><th>凯利上限 / 实用比例</th><td>下注超过它就是数学上的必死线，实用值再打对折</td></tr>
+  </table>
+
+  <div class="card">
+    <h2>如果你觉得它值</h2>
+    <p class="price">19.9</p>
+    <p class="mut" style="margin-top:0">建议金额，不是价格。任意金额都行，不付也照样能用。</p>
+    <img class="qr" src="pay-wechat.jpg" alt="微信收款码">
+    <p class="mut" style="margin-bottom:0">微信扫码 → 输入金额 → 完成。<br>不需要截图给我，也不需要告诉我你付了。</p>
+  </div>
+
+  <h2>为什么可以免费拿走</h2>
+  <p>因为这东西的全部价值，在“你今天就开始算”，不在“我收到钱”。</p>
+  <ul>
+    <li><strong>技术上无法核对。</strong>这是纯静态站，没有服务器，也就没有“付款后才解锁”的能力。做不出来的门槛，不如直接拆掉。</li>
+    <li><strong>防盗版没有意义。</strong>公式不是秘密，Excel 五分钟也能做。你买的从来不是公式。</li>
+    <li><strong>所以我把选择权交回给你</strong>：先用，用出价值再回来付。这个顺序比“先付后用”更诚实。</li>
+  </ul>
+
+  <h2>为什么是 19.9</h2>
+  <p>因为这是“一笔不用请示、不用比价”的价格带。超过 99，人就要找人商量；低于 9.9，付的人反而不认真填数。</p>
+
+  <h2>我必须说清的一件事</h2>
+  <div class="note">
+    <p style="margin-top:0"><strong>上面那笔钱，性质是“自愿赠与”，不是“购买商品”。</strong></p>
+    <p style="margin-bottom:0">原因很具体：按现行监管要求，个人静态收款码不得用于经营性的远程收款（银发〔2021〕259 号）。所以我不用它做“付款才能拿”的门——那会把它变成经营收款，也会让你我都承担不必要的风险。<strong>工具免费提供，扫码是自愿支持。</strong>这不是话术，是这条通道唯一合法的用法。</p>
+  </div>
+
+  <h2>它不做什么</h2>
+  <ul>
+    <li>不预测市场，不推荐任何标的，不承诺收益</li>
+    <li>不提供贷款方案、债务重组、法律或税务意见</li>
+    <li>不上传、不联网、不存储你填的任何数字</li>
+  </ul>
+
+  <footer>
+    <p><strong>这是算术，不是理财建议。</strong>所有结论只对你输入的数字成立。工具在你自己电脑上运行，我这边看不到你填了什么。</p>
+    <p>© 2026 清算日 · <a href="index.html">首页</a> · <a href="calc.html">免费试算</a></p>
+  </footer>
+</div>
+</body>
+</html>
