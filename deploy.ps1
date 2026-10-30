@@ -22,11 +22,11 @@ python engine\check.py
 if ($LASTEXITCODE -ne 0) { throw "check failed: refuse to deploy" }
 
 Write-Host ""
-Write-Host "== 3/5 sync docs (Pages publishes /docs only) ==" -ForegroundColor Cyan
+Write-Host "== 3/5 sync site to repo root (Pages is already serving / root) ==" -ForegroundColor Cyan
+Get-ChildItem "out\site" -File | ForEach-Object { Copy-Item $_.FullName (Join-Path $root $_.Name) -Force }
+New-Item -ItemType File -Path ".nojekyll" -Force | Out-Null
 if (Test-Path "docs") { Remove-Item "docs" -Recurse -Force }
-Copy-Item "out\site" "docs" -Recurse -Force
-New-Item -ItemType File -Path "docs\.nojekyll" -Force | Out-Null
-Write-Host ("docs files = " + (Get-ChildItem "docs" -Recurse -File).Count)
+Write-Host ("root html files = " + (Get-ChildItem $root -Filter *.html -File).Count)
 
 # ---------- git phase: git writes progress to stderr, so never let that throw ----------
 $ErrorActionPreference = "Continue"
