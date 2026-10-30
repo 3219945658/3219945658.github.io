@@ -86,7 +86,7 @@ if ($pushCode -ne 0) {
 
 Write-Host ""
 Write-Host ">>> PUSHED." -ForegroundColor Green
-Write-Host ">>> Repo -> Settings -> Pages -> Source: Deploy from a branch -> Branch: $Branch -> Folder: /docs -> Save" -ForegroundColor Green
+Write-Host ">>> Repo -> Settings -> Pages -> Source: Deploy from a branch -> Branch: $Branch -> Folder: / (root)" -ForegroundColor Green
 Write-Host ">>> Site: $Base" -ForegroundColor Green
 Write-Host ">>> P1 PASS = home page opens AND calc.html computes." -ForegroundColor Green
 exit 0
